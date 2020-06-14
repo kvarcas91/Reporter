@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using DataProcessor.Extentions;
+using Domain.Models;
 using Domain.Models.Base;
 using Microsoft.VisualBasic.FileIO;
 using System.Collections.Generic;
@@ -65,23 +66,23 @@ namespace DataProcessor
                     shortShifts.Add(item);
                 }
 
+                // Get Holidays / sickness
                 if (!string.IsNullOrEmpty(item.PayCode))
                 {
                     holidaySickness.Add(item);
                 }
 
+                // Get headcount
                 if (item.ScheduledShiftHours > 0 && string.IsNullOrEmpty(item.PayCode))
                 {
                     headcount.Add(item);
                 }
-
             }
-            //output.Add(Sort<ReportData>.ByEmployeeID(swaps).ToList());
-            var enumerable = swaps.Distinct();
-            output.Add(enumerable.ToList());
+           
+            output.Add(swaps.GetDistinct().ToList());
             output.Add(shortShifts);
             output.Add(holidaySickness.OrderBy(x => x.PayCode).ToList());
-            //output.Add(Sort<ReportData>.ByEmployeeIDWithDepartmentAndShift(headcount, roster).ToList());
+            output.Add(headcount.AddPattern(roster).ToList());
             return output;
         }
 

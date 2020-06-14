@@ -100,13 +100,13 @@ namespace Reporter_V2.ViewModels
             set { SetProperty(ref _isDataWithErrors, value); }
         }
 
-        public DelegateCommand CopyDataCommand { get; private set; }
+        public DelegateCommand<string> CopyDataCommand { get; private set; }
         public DelegateCommand ImportDataCommand { get; private set; }
         public DelegateCommand ExportDataCommand { get; private set; }
 
         public DashboardViewModel()
         {
-            CopyDataCommand = new DelegateCommand(Copy);
+            CopyDataCommand = new DelegateCommand<string>(Copy);
             ImportDataCommand = new DelegateCommand(Import);
             ExportDataCommand = new DelegateCommand(Export);
         }
@@ -157,24 +157,37 @@ namespace Reporter_V2.ViewModels
 
             SaveFileDialog dialog = new SaveFileDialog
             {
-                Filter = "CSV Files|*.csv",
+                Filter = "Excel Files|*.xlsx",
                 Title = "Save a dashboard file"
             };
 
 
-
+            IsDataLoading = true;
             if (dialog.ShowDialog() == true)
             {
-                IsDataLoading = true;
+               
                 var fileName = dialog.FileName;
-                var response = WriteData.Write(fileName, MessageSetter, _reportData, _roster);
-                IsDataLoading = false;
-                SnackBarMessage = string.Empty;
+                Task.Run(() =>
+                {
+                    var response = WriteData.Write(fileName, MessageSetter, _reportData, _roster);
+                    if (response.Success)
+                    {
+                        ShowSnackBar("Dashboard exported successfully!");
+                    }
+                    else
+                    {
+                        ShowSnackBar($"Failed: {response.Message}");
+                    }
+                    IsDataLoading = false;
+                });
+                
+               
             }
+            else IsDataLoading = false;
 
         }
 
-        private void Copy ()
+        private void Copy (string option)
         {
             IsDataLoading = true;
             if (!IsRosterImported) return;

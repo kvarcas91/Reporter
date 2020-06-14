@@ -7,7 +7,7 @@ namespace DataProcessor.Extentions
 {
     public static class IEnumerableExtention
     {
-        public static IEnumerable<T> Distinct<T>(this IEnumerable<T> data) where T : class, IEntity
+        public static List<T> GetDistinct<T>(this List<T> data) where T : class, IEntity
         {
             var distinctData = data.GroupBy(x => x.EmployeeID).Select(y => y.First());
             var output = new List<T>();
