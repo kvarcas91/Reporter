@@ -2,6 +2,7 @@
 using Domain.Models;
 using Domain.Models.Base;
 using Microsoft.VisualBasic.FileIO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -75,8 +76,24 @@ namespace DataProcessor
                 // Get headcount
                 if (item.ScheduledShiftHours > 0 && string.IsNullOrEmpty(item.PayCode))
                 {
-                    headcount.Add(item);
+                    string[] startTime = item.ShiftStartTime.Split(':');
+                    if (startTime.Length > 0)
+                    {
+                        var hour = 0;
+                        try
+                        {
+                            hour = Convert.ToInt32(startTime[0]);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                        if (hour < 12) headcount.Add(item);
+                    }
                 }
+                       
+                   
+                   
             }
            
             output.Add(swaps.GetDistinct().ToList());
