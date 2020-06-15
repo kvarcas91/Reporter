@@ -3,6 +3,7 @@ using System;
 
 namespace Domain.Models
 {
+
     public class ReportData : IEntity, IAddable, IEmployeeData
     {
         public ReportData()

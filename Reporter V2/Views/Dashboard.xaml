@@ -5,11 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Reporter_V2.Views"
              mc:Ignorable="d" 
-
-               xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
-              prism:ViewModelLocator.AutoWireViewModel="True"
-               xmlns:prism="http://prismlibrary.com/"
-              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
@@ -40,7 +38,7 @@
                     BorderThickness="0"
                     ToolTip="Export"
                     Command="{Binding ExportDataCommand}">
-                    <materialDesign:PackIcon Kind="TableExport"
+                    <materialDesign:PackIcon Kind="AccountConvert"
                                           Foreground="white"
                                          Width="24"
                                          Height="24"/>
@@ -49,124 +47,26 @@
 
             </StackPanel>
         </Border>
-      
 
 
-        <dragablz:TabablzControl Grid.Row="1" FixedHeaderCount="4"
-                                 BorderBrush="Transparent"
-                                 BorderThickness="0">
-            <dragablz:TabablzControl.InterTabController>
-                <dragablz:InterTabController/>
-            </dragablz:TabablzControl.InterTabController>
 
-            <TabItem>
-                <TabItem.Header>
-                    <TextBlock Text="Swaps" Foreground="Black"/>
-                </TabItem.Header>
-                
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Button VerticalAlignment="Top"
-                            HorizontalAlignment="Right"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    ToolTip="Copy into clipboard"
-                    Command="{Binding CopyDataCommand}" CommandParameter="swap">
-                        <materialDesign:PackIcon Kind="ContentCopy"
-                                          Foreground="{StaticResource LightBlueColorBrush}"
-                                         Width="24"
-                                         Height="24"/>
-                    </Button>
-
-                    <TextBlock Grid.Row="1"
-                               Text="No data.."
+        <Grid Grid.Row="1">
+            <TextBlock Grid.Row="1"
+                               Text="{Binding Message}"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                Visibility="{Binding IsDataLoading, Converter={StaticResource InverseBoolToVisConverter}}"/>
-                    <StackPanel Grid.Row="1"
+            <StackPanel Grid.Row="1"
                         Orientation="Vertical"
                                  VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                 Visibility="{Binding IsDataLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
                                  IsIndeterminate="True"
                                  />
-                        <TextBlock Text="{Binding SnackBarMessage}"/>
-                    </StackPanel>
-                    
-                </Grid>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <TextBlock Text="Short shifts" Foreground="Black"/>
-                </TabItem.Header>
-
-                <Grid>
-                    <TextBlock Text="No data.."
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Visibility="{Binding IsDataLoading, Converter={StaticResource InverseBoolToVisConverter}}"/>
-                    <StackPanel Orientation="Vertical"
-                                 VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                                Visibility="{Binding IsDataLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
-                                 IsIndeterminate="True"
-                                 />
-                        <TextBlock Text="{Binding SnackBarMessage}"/>
-                    </StackPanel>
-
-                </Grid>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <TextBlock Text="Holidays / Sickness" Foreground="Black"/>
-                </TabItem.Header>
-
-                <Grid>
-                    <TextBlock Text="No data.."
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Visibility="{Binding IsDataLoading, Converter={StaticResource InverseBoolToVisConverter}}"/>
-                    <StackPanel Orientation="Vertical"
-                                 VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                                Visibility="{Binding IsDataLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
-                                 IsIndeterminate="True"
-                                 />
-                        <TextBlock Text="{Binding SnackBarMessage}"/>
-                    </StackPanel>
-
-                </Grid>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <TextBlock Text="Headcount" Foreground="Black"/>
-                </TabItem.Header>
-
-                <Grid>
-                    <TextBlock Text="No data.."
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Visibility="{Binding IsDataLoading, Converter={StaticResource InverseBoolToVisConverter}}"/>
-                    <StackPanel Orientation="Vertical"
-                                 VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                                Visibility="{Binding IsDataLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
-                                 IsIndeterminate="True"
-                                 />
-                        <TextBlock Text="{Binding SnackBarMessage}"/>
-                    </StackPanel>
-
-                </Grid>
-            </TabItem>
-        </dragablz:TabablzControl>
+                <TextBlock Text="{Binding SnackBarMessage}"/>
+            </StackPanel>
+        </Grid>
 
 
         <Border Grid.Row="2" HorizontalAlignment="Center"

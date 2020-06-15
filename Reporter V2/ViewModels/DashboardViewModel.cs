@@ -4,7 +4,6 @@ using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
-using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
@@ -25,6 +24,7 @@ namespace Reporter_V2.ViewModels
         private bool _isDataWithErrors = true;
 
         private string _snackBarMessage = string.Empty;
+        private string _message = "No data...";
         private string _errorMessage = "Roster is not imported";
         private string _dataErrorMessage = "Data is not imported";
 
@@ -50,6 +50,12 @@ namespace Reporter_V2.ViewModels
         {
             get => _errorMessage;
             set { SetProperty(ref _errorMessage, value); }
+        }
+
+        public string Message
+        {
+            get => _message;
+            set { SetProperty(ref _message, value); }
         }
 
         public string DataErrorMessage
@@ -138,6 +144,7 @@ namespace Reporter_V2.ViewModels
                 IsDataImported = true;
                 DataInformation = $"{Path.GetFileName(path)}\n{_reportData.Count} columns";
                 IsDataWithErrors = _reportDataErrors.Count > 0 ? true : false;
+                if (IsDataImported && IsRosterImported) Message = "Ready to generate dashboard!";
             });
           
         }
@@ -169,6 +176,7 @@ namespace Reporter_V2.ViewModels
                 var fileName = dialog.FileName;
                 Task.Run(() =>
                 {
+                    
                     var response = WriteData.Write(fileName, MessageSetter, _reportData, _roster);
                     if (response.Success)
                     {
@@ -179,6 +187,7 @@ namespace Reporter_V2.ViewModels
                         ShowSnackBar($"Failed: {response.Message}");
                     }
                     IsDataLoading = false;
+                    System.Diagnostics.Process.Start(fileName);
                 });
                 
                
@@ -189,7 +198,7 @@ namespace Reporter_V2.ViewModels
 
         private void Copy (string option)
         {
-            IsDataLoading = true;
+
             if (!IsRosterImported) return;
             var dataString = new StringBuilder();
             foreach (var item in _roster)
@@ -215,8 +224,7 @@ namespace Reporter_V2.ViewModels
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            var test = navigationContext.Parameters["roster"] as ObservableCollection<RosterData>;
-            if (test != null)
+            if (navigationContext.Parameters["roster"] is ObservableCollection<RosterData>)
             {
                 return true;
             }

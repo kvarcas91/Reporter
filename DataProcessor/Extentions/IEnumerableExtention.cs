@@ -7,7 +7,7 @@ namespace DataProcessor.Extentions
 {
     public static class IEnumerableExtention
     {
-        public static List<T> GetDistinct<T>(this List<T> data) where T : class, IEntity
+        public static IEnumerable<T> GetDistinct<T>(this IEnumerable<T> data) where T : class, IEntity
         {
             var distinctData = data.GroupBy(x => x.EmployeeID).Select(y => y.First());
             var output = new List<T>();
@@ -21,16 +21,17 @@ namespace DataProcessor.Extentions
 
         public static IEnumerable<T> AddPattern<T>(this IEnumerable<T> data, IEnumerable<RosterData> roster) where T : class, IEmployeeData, IEntity
         {
-            var distinctData = data.Distinct();
+            var distinctData = data.GetDistinct();
             var output = new List<T>();
-            foreach (var item in data)
+            foreach (var item in distinctData)
             {
                 var department = roster.Where(empl => empl.EmployeeID.Equals(item.EmployeeID)).Select(x => x.DepartmentID).FirstOrDefault();
                 var shiftPattern = roster.Where(empl => empl.EmployeeID.Equals(item.EmployeeID)).Select(x => x.ShiftPattern).FirstOrDefault();
                 item.AddPattern(department, shiftPattern);
+                output.Add(item);
             }
 
-            return data;
+            return output;
         }
     }
 }
