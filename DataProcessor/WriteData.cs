@@ -171,10 +171,11 @@ namespace DataProcessor
             workSheet.Cells[1, 1] = "Employee Name";
             workSheet.Cells[1, 2] = "Employee ID";
             workSheet.Cells[1, 3] = "Day";
-            workSheet.Cells[1, 4] = "Pay Code";
-            workSheet.Cells[1, 5] = "Amount";
+            workSheet.Cells[1, 4] = "Segmented Start Time";
+            workSheet.Cells[1, 5] = "Pay Code";
+            workSheet.Cells[1, 6] = "Amount";
 
-            var columnHeadingsRange = workSheet.Range[workSheet.Cells[1, 1], workSheet.Cells[1, 5]];
+            var columnHeadingsRange = workSheet.Range[workSheet.Cells[1, 1], workSheet.Cells[1, 6]];
             SetHeaderColor(columnHeadingsRange);
             SetBorder(columnHeadingsRange);
 
@@ -186,10 +187,11 @@ namespace DataProcessor
                     workSheet.Cells[row, 1] = item.Name;
                     workSheet.Cells[row, 2] = item.EmployeeID;
                     workSheet.Cells[row, 3] = item.Day;
-                    workSheet.Cells[row, 4] = item.PayCode;
-                    workSheet.Cells[row, 5] = item.Amount;
+                    workSheet.Cells[row, 4] = item.SegmentedStartTime;
+                    workSheet.Cells[row, 5] = item.PayCode;
+                    workSheet.Cells[row, 6] = item.Amount;
 
-                    var cellRange = workSheet.Range[workSheet.Cells[row, 1], workSheet.Cells[row, 5]];
+                    var cellRange = workSheet.Range[workSheet.Cells[row, 1], workSheet.Cells[row, 6]];
                     SetBorder(cellRange);
                     row++;
                 }
@@ -204,10 +206,12 @@ namespace DataProcessor
         private static string WriteOBHeadcountData(Worksheet workSheet, List<ReportData> data)
         {
             workSheet.Cells[1, 1] = "Employee ID";
-            workSheet.Cells[1, 2] = "Department";
-            workSheet.Cells[1, 3] = "Shift";
+            workSheet.Cells[1, 2] = "Name";
+            workSheet.Cells[1, 3] = "Shift Start Time";
+            workSheet.Cells[1, 4] = "Department";
+            workSheet.Cells[1, 5] = "Shift";
 
-            var columnHeadingsRange = workSheet.Range[workSheet.Cells[1, 1], workSheet.Cells[1, 3]];
+            var columnHeadingsRange = workSheet.Range[workSheet.Cells[1, 1], workSheet.Cells[1, 5]];
             SetHeaderColor(columnHeadingsRange);
             SetBorder(columnHeadingsRange);
 
@@ -217,10 +221,12 @@ namespace DataProcessor
                 foreach (var item in data)
                 {
                     workSheet.Cells[row, 1] = item.EmployeeID;
-                    workSheet.Cells[row, 2] = item.DepartmentID;
-                    workSheet.Cells[row, 3] = item.ShiftPattern;
+                    workSheet.Cells[row, 2] = item.Name;
+                    workSheet.Cells[row, 3] = item.ShiftStartTime;
+                    workSheet.Cells[row, 4] = item.DepartmentID;
+                    workSheet.Cells[row, 5] = item.ShiftPattern;
 
-                    var cellRange = workSheet.Range[workSheet.Cells[row, 1], workSheet.Cells[row, 3]];
+                    var cellRange = workSheet.Range[workSheet.Cells[row, 1], workSheet.Cells[row, 5]];
                     SetBorder(cellRange);
                     row++;
                 }

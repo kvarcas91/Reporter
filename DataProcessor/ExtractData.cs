@@ -56,15 +56,15 @@ namespace DataProcessor
             {
 
                 // Get swaps
-                if (item.Notes.ToLower().Contains("swap"))
+                if (item.Notes.ToLower().Contains("swap") || item.Notes.ToLower().Contains("switch") || (item.Notes.Contains("instead")))
                 {
-                    swaps.Add(item);
+                    if (VerifyTime(item)) swaps.Add(item);
                 }
 
                 // Get Short Shifts
                 if (string.IsNullOrEmpty(item.PayCode) && (item.ScheduledShiftHours > 0 && item.ScheduledShiftHours < 10))
                 {
-                    shortShifts.Add(item);
+                    if (VerifyTime(item)) shortShifts.Add(item);
                 }
 
                 // Get Holidays / sickness
@@ -76,32 +76,40 @@ namespace DataProcessor
                 // Get headcount
                 if (item.ScheduledShiftHours > 0 && string.IsNullOrEmpty(item.PayCode))
                 {
-                    string[] startTime = item.ShiftStartTime.Split(':');
-                    if (startTime.Length > 0)
-                    {
-                        var hour = 0;
-                        try
-                        {
-                            hour = Convert.ToInt32(startTime[0]);
-                        }
-                        catch
-                        {
-                            continue;
-                        }
-                        if (hour < 12) headcount.Add(item);
-                    }
+                    if (VerifyTime(item)) headcount.Add(item);
+                    
                 }
                        
                    
                    
             }
-           
+
             output.Add(swaps.GetDistinct().ToList());
-            output.Add(shortShifts);
+            output.Add(shortShifts.GetDistinct().ToList());
             output.Add(holidaySickness.OrderBy(x => x.PayCode).ToList());
             output.Add(headcount.AddPattern(roster).ToList());
             return output;
         }
+
+        private static bool VerifyTime(ReportData item, bool segmentedTime = false)
+        {
+            string[] startTime = segmentedTime ? item.SegmentedStartTime.Split(':') : item.ShiftStartTime.Split(':');
+            if (startTime.Length > 0)
+            {
+                int hour;
+                try
+                {
+                    hour = Convert.ToInt32(startTime[0]);
+                }
+                catch
+                {
+                    return false;
+                }
+                if (hour < 12) return true;
+            }
+            return false;
+        }
+
 
     }
 }
